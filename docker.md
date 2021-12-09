@@ -136,7 +136,7 @@ git clone https://github.com/darey-devops/tooling.git
 
 - On your terminal, export the location of the SQL file
 ```
-export tooling_db_schema=~/tooling/html/tooling_db_schema.sql
+export tooling_db_schema=~/environment/docker-projects/tooling/html/tooling_db_schema.sql
 ```
 
 ![8](https://user-images.githubusercontent.com/47898882/145481853-a57285a3-ff69-4421-b3b6-5a3d72812328.JPG)
