@@ -74,7 +74,7 @@ You should see the newly created container listed in the output. It includes con
 docker network create --subnet=172.18.0.0/24 tooling_app_network 
 ```
 
-![{1FDF2E9B-1639-4880-9207-01514781E6A2} png](https://user-images.githubusercontent.com/76074379/136106030-0816b427-4c33-468d-a487-dcd9445a6daa.jpg)
+![5](https://user-images.githubusercontent.com/47898882/145481846-9eea3cae-cd17-435a-b7f3-c8a00eeb0eda.JPG)
 
 Creating a custom network is not necessary because even if we do not create a network, Docker will use the default network for all the containers you run. By default, the network we created above is of DRIVER Bridge. So, also, it is the default network. You can verify this by running the docker network ls command.
 
