@@ -105,10 +105,9 @@ docker ps -a
 
 Create a file and name it `create_user.sql` and add the below code in the file:
 ```
-CREATE USER 'mysql_user'@'%' IDENTIFIED BY '1234ABC';
-GRANT ALL PRIVILEGES ON * . * TO 'mysql_user'@'%';
+CREATE USER 'sql_user'@'%' IDENTIFIED BY '1234ABC';
+GRANT ALL PRIVILEGES ON * . * TO 'sql_user'@'%';
 ```
-![{B1943C25-42B8-4F25-9B98-05F135606C4B} png](https://user-images.githubusercontent.com/76074379/136106907-1c860de4-13e1-4743-83d1-f770600ce290.jpg)
 
 - Run the script: 
 ```
