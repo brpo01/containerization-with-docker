@@ -199,6 +199,8 @@ In the above command, we specify a parameter -t, so that the image can be tagged
 docker run --network tooling_app_network --name website -d -h mysqlserverhost -p 8085:80 -it tooling:0.0.1
 ```
 
+![13](https://user-images.githubusercontent.com/47898882/145481869-b3bc8f8d-c9f1-4651-88b4-cadf49cb83d7.JPG)
+
 ***Let us observe those flags in the command. We need to specify the --network flag so that both the Tooling app and the database can easily connect on the same virtual network we created earlier. The -p flag is used to map the container port with the host port. Within the container, apache is the webserver running and, by default, it listens on port 80. You can confirm this with the CMD ["start-apache"] section of the Dockerfile. But we cannot directly use port 80 on our host machine because it is already in use. The workaround is to use another port that is not used by the host machine. In our case, port 8085 is free, so we can map that to port 80 running in the container.***
 
 
@@ -217,7 +219,6 @@ All we have done until now required quite a lot of effort to create an image and
 We will refactor the Tooling app POC so that we can leverage the power of Docker Compose.
 
 - First, install Docker Compose on your workstation. You can check the version of docker compose with this command: `docker-compose --version`
-![{D056E902-A289-4EC1-8FE7-05EC46BC98D9} png](https://user-images.githubusercontent.com/76074379/136362007-8942412b-bd02-43c9-a084-83a3652be34d.jpg)
 
 - Create a file and name it tooling.yaml
 - Begin to write the Docker Compose definitions with YAML syntax. The code below represent the deployment infrastructure:
