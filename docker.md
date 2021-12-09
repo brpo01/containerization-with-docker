@@ -220,56 +220,50 @@ We will refactor the Tooling app POC so that we can leverage the power of Docker
 
 - First, install Docker Compose on your workstation. You can check the version of docker compose with this command: `docker-compose --version`
 
-- Create a file and name it tooling.yaml
+- Create a file and name it docker-compose.yaml
 - Begin to write the Docker Compose definitions with YAML syntax. The code below represent the deployment infrastructure:
 
 ```
-version: "3.9"
+version: "3"
+
 services:
-  db:
-    image: mysql/mysql-server:latest
-    hostname: "${DB_HOSTNAME}"
-    restart: unless-stopped
-    container_name: tooling-db-server
-    environment:
-      MYSQL_DATABASE: "${DB_DATABASE}"
-      MYSQL_USER: "${DB_USER}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
-      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+  tooling_app:
+    build: .
+    container_name: tooling_app
     ports:
-      - "${DB_PORT}:3306"
+      - ${APP_PORT}:80
+    volumes:
+      - tooling_app:/var/www/html
+    links:
+      - tooling_db
+    depends_on:
+      - tooling_db
+  tooling_db:
+    image: mysql:5.7
+    hostname: ${MYSQL_HOSTNAME}
+    container_name: tooling_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - db:/var/lib/mysql
-
-  app:
-    build:
-      context: .
-    container_name: tooling-website
-    restart: unless-stopped
-    volumes:
-      - ~/html/.:/var/www/html
-    ports:
-      - "${APP_PORT}:80"
-    links:
-      - db
-    depends_on:
-      - db
-  
 volumes:
-   db:
-   ```
-![{B5827CDA-C3DC-4CB5-867A-F86A225DC58D} png](https://user-images.githubusercontent.com/76074379/136362525-e250789f-3639-4b92-bfb8-84e4212ade71.jpg)
+  tooling_app:
+  db:
+```
 
    - Create a `.env` file to reference the variables in the tooling.yml file so they can be picked up during execution.(Make sure you have dotenv installed on your workstation). Paste the below variables in the `.env` file:
 
 ```
-DB_HOSTNAME=mysqlserverhost
-DB_DATABASE=toolingdb
-DB_USER=mysql_user
-DB_PASSWORD=1234ABC
-DB_ROOT_PASSWORD=1234abc
-DB_PORT=3306
 APP_PORT=8085
+MYSQL_HOSTNAME=mysqlserverhost
+MYSQL_DATABASE=toolingdb
+MYSQL_USER=sql_user
+MYSQL_PASSWORD=password0987654321
+MYSQL_ROOT_PASSWORD=password1234567
 ```
 ![{4A2BC85D-41D0-4105-83C5-7C926055AA75} png](https://user-images.githubusercontent.com/76074379/136363016-e6d9f1a1-09e5-4e26-bd1f-2d3bfbcf7cfd.jpg)
 
