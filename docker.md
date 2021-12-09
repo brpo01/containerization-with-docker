@@ -114,7 +114,7 @@ GRANT ALL PRIVILEGES ON * . * TO 'sql_user'@'%';
 docker exec -i <container name or ID> mysql -uroot -p$MYSQL_PW < ~/create_user.sql
 ```
 
-![{69CFEE72-F0A1-43F5-8996-BB363B4C8C47} png](https://user-images.githubusercontent.com/76074379/136196469-c8972673-0c80-4743-b9fe-7072b4f435ad.jpg)
+![6](https://user-images.githubusercontent.com/47898882/145481847-e61a5111-9ac1-4d90-bc0b-c53145050d6e.JPG)
 
 **Step 4: Connecting to the MySQL server from a second container running the MySQL client utility**
 - Run the MySQL Client Container:
@@ -122,7 +122,7 @@ docker exec -i <container name or ID> mysql -uroot -p$MYSQL_PW < ~/create_user.s
 ```
 docker run --network tooling_app_network --name DB-client -it --rm mysql mysql -h mysqlserverhost -u mysql_user -p
 ```
-![{1AFD3A29-2121-434F-B303-89B11C077449} png](https://user-images.githubusercontent.com/76074379/136196696-44d6d3ee-0e2e-42b1-afab-09e39fa5782b.jpg)
+![7](https://user-images.githubusercontent.com/47898882/145481851-02fbbedb-691f-4174-a43b-579075bf7615.JPG)
 
 - Since it is confirmed that you can connect to your DB server from a client container, exit the mysql utility and press `Control+ C` to terminate the process thus removing the container( the container is not running in a detached mode since we didn't use **-d** flag ).
 
@@ -131,19 +131,15 @@ Now you need to prepare a database schema so that the Tooling application can co
 
 - Create a directory and name it tooling, then download the Tooling-app repository from github.
 ```
-wget https://github.com/darey-devops/tooling.git 
-```
-
-- Unzip the file and delete the zip file
-```
-unzip <name-of-zip-file> && rm -f <name-of-zip-file>
+git clone https://github.com/darey-devops/tooling.git 
 ```
 
 - On your terminal, export the location of the SQL file
 ```
 export tooling_db_schema=~/tooling/html/tooling_db_schema.sql
 ```
-![{AD688A26-3831-4122-8177-E6CEB31E34C0} png](https://user-images.githubusercontent.com/76074379/136197683-68d45584-60a4-45d8-8e08-73099a24960a.jpg)
+
+![8](https://user-images.githubusercontent.com/47898882/145481853-a57285a3-ff69-4421-b3b6-5a3d72812328.JPG)
 
 - You can find the `tooling_db_schema.sql` in the html folder of the downloaded repository.
 
