@@ -265,28 +265,23 @@ MYSQL_USER=sql_user
 MYSQL_PASSWORD=password0987654321
 MYSQL_ROOT_PASSWORD=password1234567
 ```
-![{4A2BC85D-41D0-4105-83C5-7C926055AA75} png](https://user-images.githubusercontent.com/76074379/136363016-e6d9f1a1-09e5-4e26-bd1f-2d3bfbcf7cfd.jpg)
-
-- You may create a `.gitignore` file and list the `.env` file in there if you do not want it added to github repository
-
-![{A65B5606-3F52-4031-B3CE-671901F88773} png](https://user-images.githubusercontent.com/76074379/136363202-2fcefe77-bfec-4b2f-8808-b2922d475fca.jpg)
-
 - Run the command to start the containers
 ```
 docker-compose -f tooling.yaml  up -d 
 ```
-![{0B77D6FC-5517-446F-8F9F-96456F3CD51F} png](https://user-images.githubusercontent.com/76074379/136363306-ac714d7c-2e25-4d09-9d9a-7dd761f7dc0d.jpg)
+
+![14](https://user-images.githubusercontent.com/47898882/145481874-8d48301f-7f3d-4280-b3b2-b8ba70be0a19.JPG)
 
 - Verify that the compose is in the running status:
+
 ```
-docker compose ls
+docker ps  
 ```
+![15](https://user-images.githubusercontent.com/47898882/145481878-139d3218-d185-40c6-aa16-5d84bbd5a8f7.JPG)
 
-- Go to your browser and load http://localhost:8085
+- Go to your browser and load http://ip-address:8085
 
-
-![{21A0E16D-1852-42AE-9924-912BC09DCB92} png](https://user-images.githubusercontent.com/76074379/136201945-99638163-d8c7-4998-b036-9df99efb84eb.jpg)
-
+![11](https://user-images.githubusercontent.com/47898882/145481861-0693dd26-f1ee-410b-8888-52edddfa84a4.JPG)
 
 
 ## 2. PHP-TODO Application Containerization using Docker
