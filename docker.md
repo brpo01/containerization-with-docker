@@ -44,10 +44,10 @@ In the command above, we used the latest version tag. This tag may differ accord
 - Then, check to see if the MySQL container is running:
 
   ```
-  docker ps -a
+  docker ps 
   ```
-  
-  ![{DB4B33D7-0399-4412-8441-15BA6C9DE002} png](https://user-images.githubusercontent.com/76074379/136105399-a3d72b73-ff66-4149-b0db-e29e2a80e227.jpg)
+
+  ![3](https://user-images.githubusercontent.com/47898882/145481837-b08b7fc3-eb96-4928-a268-5aa31ff0c03c.JPG)
   
 You should see the newly created container listed in the output. It includes container details, one being the status of this virtual environment. The status changes from health: starting to healthy, once the setup is complete.
 
@@ -61,7 +61,7 @@ You should see the newly created container listed in the output. It includes con
 ```
  docker exec -it <DB container name or ID> mysql -uroot -p 
 ```
-![{5FE4CA5E-F0C8-4364-8B1C-5158CB764229} png](https://user-images.githubusercontent.com/76074379/136105829-8bc53533-01d6-434e-b637-de1d21857c29.jpg)
+![4](https://user-images.githubusercontent.com/47898882/145481842-af75cef5-ed35-4bf8-a536-77f247d38162.JPG)
 
    - Provide the root password when prompted. With that, you have connected the MySQL client to the server
    - Finally, change the server root password to protect your database
