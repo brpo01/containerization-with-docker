@@ -17,18 +17,15 @@ Let us start assembling our application from the Database layer – we will use 
 ```
 docker pull mysql/mysql-server:latest
 ```
-![{95D80C28-457A-4455-9FA5-C41E6A525B17} png](https://user-images.githubusercontent.com/76074379/136104500-e91ed18f-99b5-43f2-937f-5defa5173d26.jpg)
 
 If you are interested in a particular version of MySQL, replace latest with the version number. Visit Docker Hub to check other tags
 
 - List the images to check that you have downloaded them successfully:
 
 ```
-docker images ls
+docker image ls
 ```
-
-![{173F4432-4A1E-4903-8B95-32A354A4085F} png](https://user-images.githubusercontent.com/76074379/136104806-cec70401-120d-431a-b7e0-2db09050864a.jpg)
-
+![2](https://user-images.githubusercontent.com/47898882/145481834-19b17180-e0aa-42c8-b790-09a443c27db5.JPG)
 
 **Step 2: Deploy the MySQL Container to your Docker Engine**
 
