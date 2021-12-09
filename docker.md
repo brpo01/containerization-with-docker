@@ -146,17 +146,17 @@ export tooling_db_schema=~/environment/docker-projects/tooling/html/tooling_db_s
 Use the SQL script to create the database and prepare the schema. With the docker exec command, you can execute a command in a running container.
 ```
 docker exec -i DB-server mysql -uroot -p$MYSQL_PW < $tooling_db_schema 
+
 ```
-![{404F885C-EFE9-412F-9716-402867B35579} png](https://user-images.githubusercontent.com/76074379/136197783-a0e56483-1ec5-44ed-a288-3426e5582ce1.jpg)
+![9](https://user-images.githubusercontent.com/47898882/145481854-8aaca160-fa2b-4b01-8026-b1f44d752d1b.JPG)
 
 - Update the db_conn.php file with connection details to the database
 `
  $servername = "mysqlserverhost";
- $username = "mysql_user";
+ $username = "sql_user";
  $password = "1234ABC";
  $dbname = "toolingdb";
  `
-![{77DB2E0D-A6C7-4FE7-802E-1E8183AA25FD} png](https://user-images.githubusercontent.com/76074379/136197951-b9a20ceb-26fc-4da6-8250-d009bb80e733.jpg)
 
 **Step 6: Packaging, Building and Deploying the Application**
 - A shell script named `start-apache` came with the downloaded repository. It will be referenced in a special file called `Dockerfile` and run with the `CMD` Dockerfile instruction. This will allow us to be able to map other ports to port 80 and publish them using **-p** in our command as we will see later on.
