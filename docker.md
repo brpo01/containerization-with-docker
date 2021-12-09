@@ -86,7 +86,8 @@ For clarity’s sake, we will create a network with a subnet dedicated for our p
 ```
 export MYSQL_PW=<type password here>
 ```
-![{F9CB36E5-72FD-40C0-8E3F-EF039B9B176F} png](https://user-images.githubusercontent.com/76074379/136106236-7ad20686-f87c-4912-8661-01dc98a9df2b.jpg)
+
+![1](https://user-images.githubusercontent.com/47898882/145481826-c621cf92-af8b-4505-8ca0-5ecd99cb4d23.JPG)
 
 - Then, pull the image and run the container, all in one command like below:
 
