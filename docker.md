@@ -367,11 +367,34 @@ volumes:
 
 - Update the `.env` file
 
-```yaml
-
-
 ```
-![{935414C1-7099-4F52-9EBF-24FA2D1B85B8} png](https://user-images.githubusercontent.com/76074379/137537533-8e6079a2-2aa6-46c4-95cc-6f91b1e90290.jpg)
+APP_ENV=local
+APP_DEBUG=true
+APP_KEY=SomeRandomString
+APP_URL=http://localhost
+
+MYSQL_HOSTNAME=mysqlserverhost
+MYSQL_DB=homestead
+MYSQL_USERNAME=homestead
+MYSQL_PASSWORD=sePret^i
+MYSQL_ROOT_PASSWORD=password1234567
+APP_PORT=8000
+
+CACHE_DRIVER=file
+SESSION_DRIVER=file
+QUEUE_DRIVER=sync
+
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+MAIL_DRIVER=smtp
+MAIL_HOST=mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+```
 
 - Make sure you change directory to php-todo directory. Build image using this command:
 ```
@@ -382,16 +405,16 @@ docker build -t php-todo:latest .
 ```
 docker-compose up -d
 ```
-![{6E56E0A6-D362-4ED3-ABB6-C6B097B2BF50} png](https://user-images.githubusercontent.com/76074379/137554026-2a2d501d-98ac-4d81-88d9-d629acb1c83e.jpg)
+![16](https://user-images.githubusercontent.com/47898882/145481880-aff9ae4d-cd12-4063-ac02-1501276823fe.JPG)
 
 - We are going to open a docker hub account if we do not have already. Go to  your bbroswer and open a dockerhub account
 - On your terminal/editor, create a new tag for the image you want to push using the
 proper syntax.
 
 ```
-docker tag php-todo:latest thecountt/php-todo:1.0.0
+docker tag php-todo:latest tobyrotimi/php-todo:1.0.0
 ```
-![{A380BC13-5CC6-40ED-A34C-00FCC569E189} png](https://user-images.githubusercontent.com/76074379/137539643-637ca9c4-7737-433b-97c5-688db1dfed1d.jpg)
+
 - Run this command to see the image with the newly created tag
 
 ```
@@ -403,15 +426,19 @@ Login to your dockerhub account and type in your credentials
 ```
 docker login
 ```
-![{C8CA5105-2713-4511-9AEC-A46B41BFB7E1} png](https://user-images.githubusercontent.com/76074379/137540418-2a9d026d-89fb-4276-968d-95961566f74d.jpg)
+
+![18](https://user-images.githubusercontent.com/47898882/145481888-79739991-eb03-461d-9b0a-9d295569c41b.JPG)
 
 - Push the docker image from the local machine to the dockerhub repository
 ```
-docker push thecountt/php-todo:1.0.0
+docker push tobyrotimi/php-todo:1.0.0
 ```
-![{80B6ABB2-FF9E-48E7-84CD-6FECF1CD5143} png](https://user-images.githubusercontent.com/76074379/137539999-fa21ec99-e1ac-4c4c-a609-bb666eaafa2f.jpg)
 
-## CI/CD with Jenkins (Machine or Container)
+![17](https://user-images.githubusercontent.com/47898882/145481885-fcd096d6-4e39-4d95-8910-af9e2d952a5b.JPG)
+
+![19](https://user-images.githubusercontent.com/47898882/145481892-9da33784-9efe-451b-81c1-3864ebb420d2.JPG)
+
+## CI/CD with Jenkins (Machine or Container) - Deploying/Building Docker Containers & Pushing to Dockerhub using Jenkins
 
 ### 1. Using Local Machine
 
@@ -441,8 +468,6 @@ sudo apt-get install jenkins
 
 `sudo cat /var/lib/jenkins/secrets/initialAdminPassword` to print the password on the terminal.
 
-![{19CD1653-CEAF-4F90-81E5-256330E7448E} png](https://user-images.githubusercontent.com/76074379/137549596-27a14fa9-9a86-4039-bfc4-8be9adb1a76a.jpg)
-
 #### Jenkins Pipeline
 - First we will install the plugins needed
   - On the Jenkins Dashboard, click on `Manage Jenkins` and go to `Manage Plugins`.
@@ -452,10 +477,6 @@ sudo apt-get install jenkins
     - Docker Compose Build Steps
     - HttpRequest
     
-- Create a new repository in your dockerhub account to push image into
-
-![{6782567F-DE5D-4C06-83D8-07E392117EFE} png](https://user-images.githubusercontent.com/76074379/137549931-c60f0b5b-4fb8-4fa1-af38-33404263e198.jpg)
-
 - We need to create credentials that we will reference so as to be able to push our image to the docker hub repository
 
   - Click on  `Manage Jenkins` and go to `Manage Credentials`.
