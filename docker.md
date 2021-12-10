@@ -286,7 +286,7 @@ docker ps
 
 ## 2. PHP-TODO Application Containerization using Docker
 
-Repo: https://github.com/TheCountt/docker-php-todo
+Repo: https://github.com/brpo01/docker-todo-webapp
 
 - Download or clone php-todo repository using `wget`(and unzip it) or `git clone`
 
