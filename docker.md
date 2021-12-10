@@ -288,50 +288,40 @@ docker ps
 
 Repo: https://github.com/brpo01/docker-todo-webapp
 
-- Download or clone php-todo repository using `wget`(and unzip it) or `git clone`
-
-![{D9F51F4D-6434-4212-860E-E12F75E0DEF4} png](https://user-images.githubusercontent.com/76074379/137538985-828c6b19-fe13-43c7-8e0c-44fb44455dc3.jpg)
-
-![{DE7ACA34-86E0-4EBA-8F71-0E86E4B6E4D4} png](https://user-images.githubusercontent.com/76074379/137539144-d7914bad-072c-4b60-8d1e-7672221c4926.jpg)
-
+- Clone php-todo repository using `wget`(and unzip it) or `git clone`
 
 - Write a dockerfile for php-todo app and save it in the php-todo directory
 ```
-FROM php:7.4.24-apache
-LABEL Dare=dare@zooto.io
+FROM php:7-apache
+MAINTAINER Rotimi opraise139@gmail.com
 
-#install zip, unzip extension, git, mysql-client
-RUN apt-get update --fix-missing && apt-get install -y \
-  default-mysql-client \
-  git \
-  unzip \
-  zip \
-  curl \
-  wget
-  
 # Install docker php dependencies
-RUN docker-php-ext-install pdo_mysql mysqli
+RUN docker-php-ext-install mysqli 
 
-# Add config files and binary file and enable webserver
+# copy virtualhost config file unto the apache deafult conf in the container
 COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 COPY start-apache /usr/local/bin
 RUN a2enmod rewrite
 
+# Install php dependency - composer
 RUN curl -sS https://getcomposer.org/installer |php && mv composer.phar /usr/local/bin/composer
 
-# Copy application source
-COPY . /var/www
+#Copy all files 
+COPY . /var/www/html
 RUN chown -R www-data:www-data /var/www
 
 EXPOSE 80
 
 CMD ["start-apache"]
 ```
-![{6A42FDDB-8B8D-4009-BD0F-4487E92250E7} png](https://user-images.githubusercontent.com/76074379/137537100-b2e6264f-0e10-4b97-b5f2-b34c37e5921f.jpg)
 
 - Open the `start-apache` file, add the following commands below in addition to the commands already in the file:
 
 ```
+#!/usr/bin/env bash
+sed -i "s/Listen 80/Listen ${PORT:-80}/g" /etc/apache2/ports.conf
+sed -i "s/:80/:${PORT:-80}/g" /etc/apache2/sites-enabled/*
+
 composer install --no-plugins --no-scripts
 
 php artisan migrate
