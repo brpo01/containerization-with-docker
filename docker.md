@@ -366,34 +366,10 @@ volumes:
 ```
 
 - Update the `.env` file
-```
-APP_PORT=8000
-APP_ENV=local
-APP_DEBUG=true
-APP_KEY=SomeRandomString
-APP_URL=http://localhost
 
-DB_HOSTNAME=mysqlserverhost
-DB_DATABASE=homestead
-DB_USERNAME=homestead
-DB_PASSWORD=sePret^1
-DB_ROOT_PASSWORD=Qwerty123@
-DB_PORT=3306
+```yaml
 
-CACHE_DRIVER=file
-SESSION_DRIVER=file
-QUEUE_DRIVER=sync
 
-REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=null
-REDIS_PORT=6379
-
-MAIL_DRIVER=smtp
-MAIL_HOST=mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
 ```
 ![{935414C1-7099-4F52-9EBF-24FA2D1B85B8} png](https://user-images.githubusercontent.com/76074379/137537533-8e6079a2-2aa6-46c4-95cc-6f91b1e90290.jpg)
 
