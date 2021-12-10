@@ -476,7 +476,7 @@ sudo apt-get install jenkins
     - Docker
     - Docker Compose Build Steps
     - HttpRequest
-    
+
 - We need to create credentials that we will reference so as to be able to push our image to the docker hub repository
 
   - Click on  `Manage Jenkins` and go to `Manage Credentials`.
@@ -484,21 +484,16 @@ sudo apt-get install jenkins
   - Click on `add credentials` and choose `username with password`
   - Input your dockerhub username and password
 
-![{F069636D-EE64-4502-B73A-781C822FC9F8} png](https://user-images.githubusercontent.com/76074379/137545904-b1fa454c-cb1d-4866-bd97-157fd7a4f143.jpg)
-
 - Create a Jenkinsfile in the php-todo directory that will build image from context in the github repo; deploy application; make http request to see if it returns the status code 200 & push the image to the dockerhub repository and finally clean-up stage where the  image is deleted on the Jenkins server
 
 ```
 pipeline {
     environment {
-    REGISTRY = credentials('docker-hub-cred-2')
-    PATH = "$PATH:/usr/bin"
-
+        REGISTRY = credentials('dockerhub-cred')
     }
-    
     agent any
 
-    stages {
+    stages{
 
         stage('Initial Cleanup') {
             steps {
@@ -507,84 +502,61 @@ pipeline {
                 }
             }
         }
-  
+
         stage('Checkout SCM') {
             steps {
-                git branch: 'main', url: 'https://github.com/TheCountt/docker-php-todo.git'
+                git branch: 'master', url: 'https://github.com/brpo01/docker-todo-webapp.git'
             }
         }
-        
-        stage('Build image') {
+
+        stage('Build Image') {
             steps {
-                sh "docker build -t thecountt/docker-php-todo:${env.BRANCH_NAME}-${env.BUILD_NUMBER} ."
+                sh "docker build -t tobyrotimi/docker-php-todo:${env.BRANCH_NAME}-${env.BUILD_NUMBER} ."
             }
         }
-        stage("Start application") {
+
+        stage('Start the application') {
             steps {
-                sh "docker-compose --version"
                 sh "docker-compose up -d"
             }
         }
-        stage("Test Endpoint and Push Image to Registry") {
-            steps {
+
+        stage('Test endpoint & Push Image to Registry') {
+            steps{
                 script {
-                    while (true) {
-                        def response = httpRequest 'http://localhost:8000'
+                    while(true) {
+                        def response = httpRequest 'http://localhost'
                         if (response.status == 200) {
-                                sh "docker push thecountt/docker-php-todo:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+                            withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+                                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+                                sh "docker push tobyrotimi/docker-php-todo:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+                            }
                             break 
                         }
                     }
                 }
             }
         }
- 
-        stage ("Remove images") {
+
+        stage('Remove Images') {
             steps {
-	    	sh "docker-compose down"
-                sh "docker rmi thecountt/docker-php-todo:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+                sh "docker-compose down"
+                sh "docker rmi tobyrotimi/docker-php-todo:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
             }
         }
     }
 }
 ```
-![{71A29707-09CD-4F04-B2BE-5CE000F75B4C} png](https://user-images.githubusercontent.com/76074379/137603739-a6a2fa21-07e8-4fcb-9bc4-1a946f3b998b.jpg)
 
-
-**Note: the docker compose package is in `usr/bin`, that is why it is specified in the jenkinsfile**
-
-- Click on "Scan Repository Now" 
+- Go To Jenkins Blue Ocean & trigger a build.
 
 - A build will start. The pipeline should be successful now
 
-
-![{1E38ABFB-5A45-4D94-A9C6-B95015D8E35F} png](https://user-images.githubusercontent.com/76074379/137547662-f7d58d0c-c95a-465c-ac3d-952b235ec1d4.jpg)
-
-![{C9FB3404-990A-4F72-9F98-893661BE041F} png](https://user-images.githubusercontent.com/76074379/137547562-13fb1d7f-05ab-4dde-8cf4-13aed5e22ab0.jpg)
+![20](https://user-images.githubusercontent.com/47898882/145481897-1dae5b91-9140-41c3-9aac-53a7d8abe839.JPG)
 
 #### Github Webhook
-We need to create  a webhook so that Jenkins will automatically pick up changes in our github repo and trigger a build instead of havinf to click "Scan Repository Now" all the time on jenkins. However, we cannot connect to our localhost because it i in a private network. We will have to use a proxy server. We will map our localhost to our proxy server. The proxy server will then generate a URL for us. We will input that URL in github webhooks so any changes we make to our github repo will automatically trigger a build.
+We need to create  a webhook so that Jenkins will automatically pick up changes in our github repo and trigger a build instead of having to click "Scan Repository Now" all the time on jenkins. However, we cannot connect to our localhost because it i in a private network. We will have to use a proxy server. We will map our localhost to our proxy server. The proxy server will then generate a URL for us. We will input that URL in github webhooks so any changes we make to our github repo will automatically trigger a build.
 
-We will use **localtunnel**, a nodejs proxy server
-
-- Install nodejs npm nodejs-legacy if you do not have it installed already on your local machine
-```
-sudo apt install nodejs npm nodejs-legacy
-```
-
-- Install Localtunnel
-
-```
-npm install -g localtunnel
-```
-![{47A4268B-D9A9-453A-A7AE-26A6D947006B} png](https://user-images.githubusercontent.com/76074379/137554552-04197c7f-de48-4c4a-af8d-826b95715909.jpg)
-
-- Run the following command to get our unique url mapped to our jenkins port
-
-```
-lt --port 8080 --subdomain docker-projects
-```
-![{984D3080-5EDD-463C-8421-CE5D7DAF728A} png](https://user-images.githubusercontent.com/76074379/137554885-5712c622-89d5-4d98-a1d1-5c596316d350.jpg)
 
 - Go to github repository and click on `Settings`
 	- Click on `Webhooks`
@@ -592,8 +564,6 @@ lt --port 8080 --subdomain docker-projects
 	- Input the generated URL with /postreceive as shown in the Payroad URL space
 	- Select application/json as the Content-Type
 	- Click on `Add Webhook` to save the webhook
-
-![{EF2FCB11-2154-44E8-BF4F-7F724E5DA095} png](https://user-images.githubusercontent.com/76074379/137589297-5b6e45d5-1dc6-40a7-a10b-294c951ce82f.jpg)
 
 - Go to your terminal and change something in your jenkinsfile and save and push to your github repo. If everything works out fine, this will trigger a build which you can see on your Jenkins Dashboard.
 
