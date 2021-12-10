@@ -330,50 +330,40 @@ php artisan db:seed
 
 apache2-foreground
 ```
-![{8050675F-B9F2-4B9D-AA46-CA4B753FEB9A} png](https://user-images.githubusercontent.com/76074379/137628585-5dfd7524-aa8a-45b8-b7a4-35844709db1f.jpg)
 
 - Create a docker-compose.yml in the php-todo directory and paste the code below:
 
-```
-version: "3.9"
-services:
- app:
-    build:
-      context: .
-    container_name: php-website
-    network_mode: tooling_app_network
-    restart: unless-stopped
-    volumes:
-      - app:/php-todo
-    ports:
-      - "${APP_PORT}:80"
-    depends_on:
-      - db
+```yaml
+version: "3.3"
 
- db:
-    image: mysql/mysql-server:latest
-    container_name: php-db-server
-    network_mode: tooling_app_network
-    hostname: "${DB_HOSTNAME}"
-    restart: unless-stopped
+services: 
+  todo-app:
+    build: .
+    links:
+      - todo-db
+    depends_on: 
+      - todo-db
+    restart: always
+    volumes:
+      - todo-app:/var/www/html
+    ports:
+      - ${APP_PORT}:80
+  todo-db:
+    image: mysql:5.7
+    hostname: ${MYSQL_HOSTNAME}
+    volumes:
+      - todo-db:/var/lib/mysql
+    restart: always
     environment:
-      MYSQL_DATABASE: "${DB_DATABASE}"
-      MYSQL_USER: "${DB_USERNAME}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
-      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
-    
-    ports:
-      - "${DB_PORT}:3306"
-
-    volumes:
-      - db:/var/lib/mysql
+      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
 volumes:
-  app:
-  db:
-  ```
-![{2CB63BFB-700B-45F6-B8F7-D7CA37EC2162} png](https://user-images.githubusercontent.com/76074379/137538344-9d176fa3-86f1-4501-a776-4c92a8b884b2.jpg)
-
+  todo-app:
+  todo-db:
+```
 
 - Update the `.env` file
 ```
