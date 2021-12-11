@@ -154,7 +154,7 @@ docker exec -i DB-server mysql -uroot -p$MYSQL_PW < $tooling_db_schema
 `
  $servername = "mysqlserverhost";
  $username = "sql_user";
- $password = "1234ABC";
+ $password = "password0987654321";
  $dbname = "toolingdb";
  `
 
