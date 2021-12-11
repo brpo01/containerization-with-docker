@@ -407,7 +407,7 @@ We need to create  a webhook so that Jenkins will automatically pick up changes 
 - Go to github repository and click on `Settings`
 	- Click on `Webhooks`
 	- Click on `Add Webhooks`
-	- Input the generated URL with /postreceive as shown in the Payroad URL space
+	- Input Input http://ip-address:8080/github-webhook
 	- Select application/json as the Content-Type
 	- Click on `Add Webhook` to save the webhook
 
@@ -690,13 +690,13 @@ pipeline {
 ![20](https://user-images.githubusercontent.com/47898882/145481897-1dae5b91-9140-41c3-9aac-53a7d8abe839.JPG)
 
 #### Github Webhook
-We need to create  a webhook so that Jenkins will automatically pick up changes in our github repo and trigger a build instead of having to click "Scan Repository Now" all the time on jenkins. However, we cannot connect to our localhost because it i in a private network. We will have to use a proxy server. We will map our localhost to our proxy server. The proxy server will then generate a URL for us. We will input that URL in github webhooks so any changes we make to our github repo will automatically trigger a build.
+We need to create  a webhook so that Jenkins will automatically pick up changes in our github repo and trigger a build instead of having to click "Scan Repository Now" all the time on jenkins. We will input that URL in github webhooks so any changes we make to our github repo will automatically trigger a build.
 
-
+\
 - Go to github repository and click on `Settings`
 	- Click on `Webhooks`
 	- Click on `Add Webhooks`
-	- Input the generated URL with /postreceive as shown in the Payroad URL space
+	- Input http://ip-address:8080/github-webhook
 	- Select application/json as the Content-Type
 	- Click on `Add Webhook` to save the webhook
 
