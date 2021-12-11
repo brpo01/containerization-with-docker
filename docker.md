@@ -329,7 +329,7 @@ sudo apt-get install jenkins
   - Click on `add credentials` and choose `username with password`
   - Input your dockerhub username and password
 
-- Create a Jenkinsfile in the php-todo directory that will build image from context in the github repo; deploy application; make http request to see if it returns the status code 200 & push the image to the dockerhub repository and finally clean-up stage where the  image is deleted on the Jenkins server
+- Create a Jenkinsfile in the tooling directory that will build image from context in the github repo; deploy application; make http request to see if it returns the status code 200 & push the image to the dockerhub repository and finally clean-up stage where the  image is deleted on the Jenkins server
 
 ```
 pipeline {
@@ -397,10 +397,11 @@ pipeline {
 
 - A build will start. The pipeline should be successful now
 
-![20](https://user-images.githubusercontent.com/47898882/145481897-1dae5b91-9140-41c3-9aac-53a7d8abe839.JPG)
+![21](https://user-images.githubusercontent.com/47898882/145481901-f37b9629-68f2-47fd-9ec7-c8234915dfba.JPG)
+
 
 #### Github Webhook
-We need to create  a webhook so that Jenkins will automatically pick up changes in our github repo and trigger a build instead of having to click "Scan Repository Now" all the time on jenkins. However, we cannot connect to our localhost because it i in a private network. We will have to use a proxy server. We will map our localhost to our proxy server. The proxy server will then generate a URL for us. We will input that URL in github webhooks so any changes we make to our github repo will automatically trigger a build.
+We need to create  a webhook so that Jenkins will automatically pick up changes in our github repo and trigger a build instead of having to click "Scan Repository Now" all the time on jenkins. We will input that URL in github webhooks so any changes we make to our github repo will automatically trigger a build.
 
 
 - Go to github repository and click on `Settings`
@@ -412,7 +413,9 @@ We need to create  a webhook so that Jenkins will automatically pick up changes 
 
 - Go to your terminal and change something in your jenkinsfile and save and push to your github repo. If everything works out fine, this will trigger a build which you can see on your Jenkins Dashboard.
 
-![20](https://user-images.githubusercontent.com/47898882/145481897-1dae5b91-9140-41c3-9aac-53a7d8abe839.JPG)
+![21](https://user-images.githubusercontent.com/47898882/145481901-f37b9629-68f2-47fd-9ec7-c8234915dfba.JPG)
+
+![22](https://user-images.githubusercontent.com/47898882/145481907-06d153c6-8375-49ff-a9e7-a40a30552d0b.JPG)
 
 
 
