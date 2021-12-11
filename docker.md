@@ -283,6 +283,138 @@ docker ps
 
 ![11](https://user-images.githubusercontent.com/47898882/145481861-0693dd26-f1ee-410b-8888-52edddfa84a4.JPG)
 
+## CI/CD with Jenkins - Deploying/Building Docker Containers & Pushing to Dockerhub using Jenkins
+
+### 1. Using Local Machine
+
+-Stop and remove the manually deployed containers of above
+```
+docker-compose down
+```
+
+- Run the following command in your home directory to install java runtime:
+```
+sudo apt update -y
+sudo apt install openjdk-11-jdk
+```
+- Run the following commands to install jenkins:
+```
+wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > \
+    /etc/apt/sources.list.d/jenkins.list'
+sudo apt-get update
+sudo apt-get install jenkins
+```
+
+#### Unlocking Jenkins
+- When you first access a new Jenkins instance, you are asked to unlock it using an automatically-generated password.
+
+- Browse to http://ip-address:8080 (or whichever port you configured for Jenkins when installing it) and wait until the Unlock Jenkins page appears and you can use
+
+`sudo cat /var/lib/jenkins/secrets/initialAdminPassword` to print the password on the terminal.
+
+#### Jenkins Pipeline
+- First we will install the plugins needed
+  - On the Jenkins Dashboard, click on `Manage Jenkins` and go to `Manage Plugins`.
+  - Search and install the following plugins:
+    - Blue Ocean
+    - Docker
+    - Docker Compose Build Steps
+    - HttpRequest
+
+- We need to create credentials that we will reference so as to be able to push our image to the docker hub repository
+
+  - Click on  `Manage Jenkins` and go to `Manage Credentials`.
+  - Click on `global`
+  - Click on `add credentials` and choose `username with password`
+  - Input your dockerhub username and password
+
+- Create a Jenkinsfile in the php-todo directory that will build image from context in the github repo; deploy application; make http request to see if it returns the status code 200 & push the image to the dockerhub repository and finally clean-up stage where the  image is deleted on the Jenkins server
+
+```
+pipeline {
+    environment {
+        REGISTRY = credentials('dockerhub-cred')
+    }
+    agent any
+
+    stages{
+
+        stage('Initial Cleanup') {
+            steps {
+                dir("${WORKSPACE}") {
+                deleteDir()
+                }
+            }
+        }
+
+        stage('Checkout SCM') {
+            steps {
+                git branch: 'master', url: 'https://github.com/brpo01/docker-todo-webapp.git'
+            }
+        }
+
+        stage('Build Image') {
+            steps {
+                sh "docker build -t tobyrotimi/docker-php-todo:${env.BRANCH_NAME}-${env.BUILD_NUMBER} ."
+            }
+        }
+
+        stage('Start the application') {
+            steps {
+                sh "docker-compose up -d"
+            }
+        }
+
+        stage('Test endpoint & Push Image to Registry') {
+            steps{
+                script {
+                    while(true) {
+                        def response = httpRequest 'http://localhost'
+                        if (response.status == 200) {
+                            withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+                                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+                                sh "docker push tobyrotimi/docker-php-todo:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+                            }
+                            break 
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Remove Images') {
+            steps {
+                sh "docker-compose down"
+                sh "docker rmi tobyrotimi/docker-php-todo:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+            }
+        }
+    }
+}
+```
+
+- Go To Jenkins Blue Ocean & trigger a build.
+
+- A build will start. The pipeline should be successful now
+
+![20](https://user-images.githubusercontent.com/47898882/145481897-1dae5b91-9140-41c3-9aac-53a7d8abe839.JPG)
+
+#### Github Webhook
+We need to create  a webhook so that Jenkins will automatically pick up changes in our github repo and trigger a build instead of having to click "Scan Repository Now" all the time on jenkins. However, we cannot connect to our localhost because it i in a private network. We will have to use a proxy server. We will map our localhost to our proxy server. The proxy server will then generate a URL for us. We will input that URL in github webhooks so any changes we make to our github repo will automatically trigger a build.
+
+
+- Go to github repository and click on `Settings`
+	- Click on `Webhooks`
+	- Click on `Add Webhooks`
+	- Input the generated URL with /postreceive as shown in the Payroad URL space
+	- Select application/json as the Content-Type
+	- Click on `Add Webhook` to save the webhook
+
+- Go to your terminal and change something in your jenkinsfile and save and push to your github repo. If everything works out fine, this will trigger a build which you can see on your Jenkins Dashboard.
+
+![20](https://user-images.githubusercontent.com/47898882/145481897-1dae5b91-9140-41c3-9aac-53a7d8abe839.JPG)
+
+
 
 ## 2. PHP-TODO Application Containerization using Docker
 
